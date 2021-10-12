@@ -1,0 +1,54 @@
+<Project>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<FrameworkVersion>6.0.0-rc.1.*</FrameworkVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
+		<FrameworkVersion>5.0.*</FrameworkVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+		<FrameworkVersion>3.1.*</FrameworkVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!--build related-->
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="MinVer" Version="3.0.0-alpha.1" PrivateAssets="All" />
+
+		<!--core dependencies -->
+		<PackageReference Update="AutoMapper" Version="[10.1.1,11.0)" />
+		<PackageReference Update="Duende.IdentityServer" Version="5.2.3" />
+		<PackageReference Update="Duende.IdentityServer.AspNetIdentity" Version="5.2.3" />
+		<PackageReference Update="Duende.IdentityServer.Storage" Version="5.2.3" />
+		<PackageReference Update="MongoDB.Bson" Version="2.13.2" />
+		<PackageReference Update="MongoDB.Driver" Version="2.13.2" />
+
+		<!--misc -->
+		<PackageReference Update="AspNetCore.Identity.Mongo" Version="8.3.1" />
+		<PackageReference Update="Serilog.AspNetCore" Version="4.1.0" />
+
+		<!--tests -->
+		<PackageReference Update="FluentAssertions" Version="5.10.3" />
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+		<PackageReference Update="xunit" Version="2.4.1" />
+		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3" PrivateAssets="All" />
+
+		<!--microsoft asp.net core -->
+		<PackageReference Update="Microsoft.AspNetCore.TestHost" Version="$(FrameworkVersion)" />
+		<PackageReference Update="Microsoft.AspNetCore.Identity" Version="$(FrameworkVersion)" />
+		<PackageReference Update="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(FrameworkVersion)" />
+	</ItemGroup>
+
+	<Target Name="Versioning" BeforeTargets="MinVer">
+		<PropertyGroup Label="Build">
+			<MinVerDefaultPreReleasePhase>preview</MinVerDefaultPreReleasePhase>
+			<!-- Tag your repository with the semantic version e.g. '1.0.0' to version all NuGet packages. If you have
+           multiple NuGet packages in your solution and want to version them separately, then uncomment this line
+           and tag your repository with the name of the package followed by the semantic version e.g.
+           'PackageName-1.0.0'. -->
+			<!--<MinVerTagPrefix>$(PackageId)-</MinVerTagPrefix>-->
+			<MinVerVerbosity>normal</MinVerVerbosity>
+		</PropertyGroup>
+	</Target>
+</Project>

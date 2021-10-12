@@ -1,0 +1,40 @@
+<Project>
+	<PropertyGroup Label="Build">
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Package">
+		<Authors>David De Smet</Authors>
+		<Company />
+		<Description>MongoDB persistence layer for Duende IdentityServer.</Description>
+		<Copyright>Copyright © 2021 David De Smet</Copyright>
+		<PackageTags>MongoDB;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer;ASP.NET Core</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo/releases</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>main</RepositoryBranch>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Package Symbols">
+		<!-- Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Source Link">
+		<!-- Optional: Declare that the Repository URL can be published to NuSpec -->
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<!-- Optional: Embed source files that are not tracked by the source control manager to the PDB -->
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
+		<DebugType>embedded</DebugType>
+		<!-- Optional: Include PDB in the built .nupkg -->
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+</Project>

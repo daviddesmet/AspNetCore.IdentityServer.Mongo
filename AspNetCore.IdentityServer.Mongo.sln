@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5CC92EF3-A0E0-4215-8D5F-06BE563E2C1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.IdentityServer.Mongo", "src\AspNetCore.IdentityServer.Mongo\AspNetCore.IdentityServer.Mongo.csproj", "{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{17177BA4-A7AA-432A-B0D6-468EAD2EA7CC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{FB8B21E7-2C8D-439E-AB76-F9A5C196EDB1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.Sample", "samples\IdentityServer.Sample\IdentityServer.Sample.csproj", "{C27D1339-2C92-47DA-8F02-3F54F7845DFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetIdentity.Sample", "samples\AspNetIdentity.Sample\AspNetIdentity.Sample.csproj", "{1FF2F46A-4B40-406E-936C-1587D003A08F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C27D1339-2C92-47DA-8F02-3F54F7845DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C27D1339-2C92-47DA-8F02-3F54F7845DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C27D1339-2C92-47DA-8F02-3F54F7845DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C27D1339-2C92-47DA-8F02-3F54F7845DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FF2F46A-4B40-406E-936C-1587D003A08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FF2F46A-4B40-406E-936C-1587D003A08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FF2F46A-4B40-406E-936C-1587D003A08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FF2F46A-4B40-406E-936C-1587D003A08F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{198B1386-F0B8-4D4F-BB13-0AB029AC9AA7} = {5CC92EF3-A0E0-4215-8D5F-06BE563E2C1A}
+		{C27D1339-2C92-47DA-8F02-3F54F7845DFA} = {FB8B21E7-2C8D-439E-AB76-F9A5C196EDB1}
+		{1FF2F46A-4B40-406E-936C-1587D003A08F} = {FB8B21E7-2C8D-439E-AB76-F9A5C196EDB1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEFC2F91-079F-4AD5-B0B9-D601DF5D37DF}
+	EndGlobalSection
+EndGlobal

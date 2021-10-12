@@ -1,0 +1,40 @@
+﻿namespace IdentityServer.Sample.Pages
+{
+    using System;
+    using System.Threading.Tasks;
+    using Duende.IdentityServer.Models;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.DependencyInjection;
+
+    public static class Extensions
+    {
+        /// <summary>
+        /// Determines if the scheme support signout.
+        /// </summary>
+        public static async Task<bool> GetSchemeSupportsSignOutAsync(this HttpContext context, string scheme)
+        {
+            var provider = context.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+            var handler = await provider.GetHandlerAsync(context, scheme);
+            return (handler is IAuthenticationSignOutHandler);
+        }
+
+        /// <summary>
+        /// Checks if the redirect URI is for a native client.
+        /// </summary>
+        public static bool IsNativeClient(this AuthorizationRequest context) => !context.RedirectUri.StartsWith("https", StringComparison.Ordinal) && !context.RedirectUri.StartsWith("http", StringComparison.Ordinal);
+
+        /// <summary>
+        /// Renders a loading page that is used to redirect back to the redirectUri.
+        /// </summary>
+        public static IActionResult LoadingPage(this PageModel page, string redirectUri)
+        {
+            page.HttpContext.Response.StatusCode = 200;
+            page.HttpContext.Response.Headers["Location"] = "";
+
+            return page.RedirectToPage("/Redirect/Index", new { RedirectUri = redirectUri });
+        }
+    }
+}
