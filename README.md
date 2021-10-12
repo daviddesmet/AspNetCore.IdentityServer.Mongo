@@ -39,6 +39,8 @@ Or alternatively, you can add the AspNetCore.IdentityServer.Mongo package from w
 
 [![](https://img.shields.io/nuget/dt/AspNetCore.IdentityServer.Mongo.svg)](https://www.nuget.org/packages/AspNetCore.IdentityServer.Mongo/)
 
+### Configuration Store
+
 For storing [configuration](https://docs.duendesoftware.com/identityserver/v5/data/configuration/) data, the configuration store can be used. This support provides implementations of the *IClientStore*, *IResourceStore*, *IIdentityProviderStore*, and the *ICorsPolicyService* extensibility points.
 
 To use the configuration store support, use the *AddConfigurationStore* extension method after the call to *AddIdentityServer*:
@@ -61,6 +63,10 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
             });
 }
 ```
+
+To configure the configuration store, use the *ConfigurationStoreOptions* options object passed to the configuration callback.
+
+### Operational Store
 
 For storing [operational](https://docs.duendesoftware.com/identityserver/v5/data/operational/) data, the operational store can be used. This support provides implementations of the *IPersistedGrantStore*, *IDeviceFlowStore*, and *ISigningKeyStore* extensibility points.
 
@@ -90,9 +96,13 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 }
 ```
 
-To configure the configuration store, use the *ConfigurationStoreOptions* options object passed to the configuration callback.
+To configure the operational store, use the *OperationalStoreOptions* options object passed to the configuration callback.
 
 Collection names uses PascalCase but can be customized as needed using the corresponding configuration options.
+
+### Samples
+
+Contains samples for IdentityServer and IdentityServer with ASP.NET Identity integration.
 
 ## Learn More
 
