@@ -11,6 +11,7 @@
 		<PackageTags>MongoDB;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer;ASP.NET Core</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageReleaseNotes>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo/releases</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -27,6 +28,10 @@
 		<!-- Deterministic -->
 		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="../../README.md" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
 
 	<PropertyGroup Label="Versioning">
 		<MinVerAutoIncrement>minor</MinVerAutoIncrement>
