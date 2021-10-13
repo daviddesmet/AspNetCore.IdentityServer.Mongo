@@ -45,6 +45,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0.100-rc.2.21505.57'
+    - name: '.NET Info'
+      run: dotnet --info
     - name: '.NET Restore'
       run: dotnet tool restore
     - name: 'Build Project'
