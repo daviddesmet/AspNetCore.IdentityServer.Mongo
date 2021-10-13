@@ -40,6 +40,11 @@ jobs:
       run: git fetch --tags
     - name: 'Install .NET SDK'
       uses: actions/setup-dotnet@v1
+      if: ${{ false }}
+    - name: 'Install .NET 6 RC2 SDK'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.100-rc.2.21505.57'
     - name: '.NET Restore'
       run: dotnet tool restore
     - name: 'Build Project'
