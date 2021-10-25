@@ -102,7 +102,7 @@ Collection names uses PascalCase but can be customized as needed using the corre
 
 ### Samples
 
-Contains samples for IdentityServer and IdentityServer with ASP.NET Identity integration.
+Contains [samples](https://github.com/daviddesmet/AspNetCore.IdentityServer.Mongo/tree/main/samples) for IdentityServer and IdentityServer with ASP.NET Identity integration.
 
 ## Learn More
 
