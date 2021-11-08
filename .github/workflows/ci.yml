@@ -8,6 +8,8 @@ on:
       - main
     paths:
      - 'src/**'
+     - 'Directory.Build.props'
+     - 'Directory.Build.targets'
   pull_request:
     branches:
       - main
@@ -41,10 +43,10 @@ jobs:
     - name: 'Install .NET SDK'
       uses: actions/setup-dotnet@v1
       if: ${{ false }}
-    - name: 'Install .NET 6 RC2 SDK'
+    - name: 'Install .NET 6 SDK'
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.100-rc.2.21505.57'
+        dotnet-version: '6.0.100'
     - name: '.NET Info'
       run: dotnet --info
     - name: '.NET Restore'
