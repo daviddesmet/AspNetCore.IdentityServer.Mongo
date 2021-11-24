@@ -22,7 +22,7 @@
 		<PackageReference Update="Duende.IdentityServer.AspNetIdentity" Version="5.2.3" />
 		<PackageReference Update="Duende.IdentityServer.Storage" Version="5.2.3" />
 		<PackageReference Update="MongoDB.Bson" Version="2.13.2" />
-		<PackageReference Update="MongoDB.Driver" Version="2.13.2" />
+		<PackageReference Update="MongoDB.Driver" Version="2.13.3" />
 
 		<!--misc -->
 		<PackageReference Update="AspNetCore.Identity.Mongo" Version="8.3.2" />
