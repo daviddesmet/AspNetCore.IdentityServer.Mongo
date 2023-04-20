@@ -7,10 +7,6 @@
 		<FrameworkVersion>6.0.*</FrameworkVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
-		<FrameworkVersion>5.0.*</FrameworkVersion>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
 		<FrameworkVersion>3.1.*</FrameworkVersion>
 	</PropertyGroup>
