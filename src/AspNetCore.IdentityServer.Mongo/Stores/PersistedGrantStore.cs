@@ -114,6 +114,23 @@
 
         private IMongoQueryable<PersistedGrant> Filter(IMongoQueryable<PersistedGrant> query, PersistedGrantFilter filter)
         {
+            /* Newer version of IdentityServer, replaces below if statement
+            if (filter.ClientIds != null)
+            {
+                var ids = filter.ClientIds.ToList();
+                if (!string.IsNullOrWhiteSpace(filter.ClientId))
+                    ids.Add(filter.ClientId);
+
+                var clientIdFilter = Builders<PersistedGrant>.Filter.In(x => x.ClientId, ids);
+
+                query = query.Where(x => clientIdFilter.Inject()); // query.Where(x => ids.Contains(x.ClientId)); is not supported by Mongo
+            }
+            else if (!string.IsNullOrWhiteSpace(filter.ClientId))
+            {
+                query = query.Where(x => x.ClientId == filter.ClientId);
+            }
+            */
+
             if (!string.IsNullOrWhiteSpace(filter.ClientId))
                 query = query.Where(x => x.ClientId == filter.ClientId);
 
@@ -122,6 +139,23 @@
 
             if (!string.IsNullOrWhiteSpace(filter.SubjectId))
                 query = query.Where(x => x.SubjectId == filter.SubjectId);
+
+            /* Newer version of IdentityServer, replaces below if statement
+            if (filter.Types != null)
+            {
+                var types = filter.Types.ToList();
+                if (!string.IsNullOrWhiteSpace(filter.Type))
+                    types.Add(filter.Type);
+
+                var typesFilter = Builders<PersistedGrant>.Filter.In(x => x.Type, types);
+
+                query = query.Where(x => typesFilter.Inject()); // query.Where(x => types.Contains(x.Type)); is not supported by Mongo
+            }
+            else if (!string.IsNullOrWhiteSpace(filter.Type))
+            {
+                query = query.Where(x => x.Type == filter.Type);
+            }
+            */
 
             if (!string.IsNullOrWhiteSpace(filter.Type))
                 query = query.Where(x => x.Type == filter.Type);

@@ -1,0 +1,10 @@
+{
+  // Default LINQ Provider is V3 from 2.19
+  "DefaultLinqVersion": "V3",
+
+  // Enables builders variables tracking and composition, enabled by default
+  "EnableVariableTracking": true,
+
+  // Appends driver version to MQL expression
+  "OutputDriverVersion": false
+}

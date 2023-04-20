@@ -15,6 +15,7 @@
     using AspNetCore.IdentityServer.Mongo.Entities.Jobs;
     using AspNetCore.IdentityServer.Mongo.Interfaces;
     using AspNetCore.IdentityServer.Mongo.Stores;
+    using System.Threading;
 
     /// <summary>
     /// Helper to cleanup stale persisted grants and device codes.
@@ -51,14 +52,14 @@
         /// Method to clear expired persisted grants.
         /// </summary>
         /// <returns></returns>
-        public async Task RemoveExpiredGrantsAsync()
+        public async Task RemoveExpiredGrantsAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 _logger.LogTrace("Querying for expired grants to remove");
 
-                await RemoveGrantsAsync();
-                await RemoveDeviceCodesAsync();
+                await RemoveGrantsAsync(cancellationToken);
+                await RemoveDeviceCodesAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -70,22 +71,22 @@
         /// Removes the stale persisted grants.
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task RemoveGrantsAsync()
+        protected virtual async Task RemoveGrantsAsync(CancellationToken cancellationToken = default)
         {
-            await RemoveExpiredPersistedGrantsAsync();
+            await RemoveExpiredPersistedGrantsAsync(cancellationToken);
             if (_options.RemoveConsumedTokens)
-                await RemoveConsumedPersistedGrantsAsync();
+                await RemoveConsumedPersistedGrantsAsync(cancellationToken);
         }
 
         /// <summary>
         /// Removes the expired persisted grants.
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task RemoveExpiredPersistedGrantsAsync()
+        protected virtual async Task RemoveExpiredPersistedGrantsAsync(CancellationToken cancellationToken = default)
         {
             var found = int.MaxValue;
 
-            if (!await IsJobReserved(REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID, Dns.GetHostName()))
+            if (!await IsJobReservedAsync(REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID, Dns.GetHostName(), cancellationToken))
                 return;
 
             while (found >= _options.TokenCleanupBatchSize)
@@ -94,7 +95,7 @@
                                                                                 .OrderBy(x => x.Expiration)
                                                                                 .Select(x => x.Key)
                                                                                 .Take(_options.TokenCleanupBatchSize)
-                                                                                .ToListAsync();
+                                                                                .ToListAsync(cancellationToken);
 
                 found = expiredGrants.Count;
 
@@ -104,10 +105,10 @@
                 {
                     try
                     {
-                        await RemovePersistedGrantsAsync(expiredGrants);
+                        await RemovePersistedGrantsAsync(expiredGrants, cancellationToken);
 
                         if (_operationalStoreNotification != null)
-                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredGrants);
+                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredGrants, cancellationToken);
                     }
                     catch (Exception ex)
                     {
@@ -116,18 +117,18 @@
                 }
             }
 
-            await ClearJobReservation(REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID, Dns.GetHostName());
+            await ClearJobReservationAsync(REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID, Dns.GetHostName());
         }
 
         /// <summary>
         /// Removes the consumed persisted grants.
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task RemoveConsumedPersistedGrantsAsync()
+        protected virtual async Task RemoveConsumedPersistedGrantsAsync(CancellationToken cancellationToken = default)
         {
             var found = int.MaxValue;
 
-            if (!await IsJobReserved(REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID, Dns.GetHostName()))
+            if (!await IsJobReservedAsync(REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID, Dns.GetHostName(), cancellationToken))
                 return;
 
             while (found >= _options.TokenCleanupBatchSize)
@@ -136,7 +137,7 @@
                                                                                 .OrderBy(x => x.ConsumedTime)
                                                                                 .Select(x => x.Key)
                                                                                 .Take(_options.TokenCleanupBatchSize)
-                                                                                .ToListAsync();
+                                                                                .ToListAsync(cancellationToken);
 
                 found = expiredGrants.Count;
 
@@ -146,10 +147,10 @@
                 {
                     try
                     {
-                        await RemovePersistedGrantsAsync(expiredGrants);
+                        await RemovePersistedGrantsAsync(expiredGrants, cancellationToken);
 
                         if (_operationalStoreNotification != null)
-                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredGrants);
+                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredGrants, cancellationToken);
                     }
                     catch (Exception ex)
                     {
@@ -158,18 +159,18 @@
                 }
             }
 
-            await ClearJobReservation(REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID, Dns.GetHostName());
+            await ClearJobReservationAsync(REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID, Dns.GetHostName());
         }
 
         /// <summary>
         /// Removes the stale device codes.
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task RemoveDeviceCodesAsync()
+        protected virtual async Task RemoveDeviceCodesAsync(CancellationToken cancellationToken = default)
         {
             var found = int.MaxValue;
 
-            if (!await IsJobReserved(REMOVE_DEVICECODES_TASKID, Dns.GetHostName()))
+            if (!await IsJobReservedAsync(REMOVE_DEVICECODES_TASKID, Dns.GetHostName(), cancellationToken))
                 return;
 
             while (found >= _options.TokenCleanupBatchSize)
@@ -178,7 +179,7 @@
                                                                                 .OrderBy(x => x.DeviceCode)
                                                                                 .Select(x => x.DeviceCode)
                                                                                 .Take(_options.TokenCleanupBatchSize)
-                                                                                .ToListAsync();
+                                                                                .ToListAsync(cancellationToken);
 
                 found = expiredCodes.Count;
 
@@ -191,10 +192,10 @@
                         var requests = new List<WriteModel<DeviceFlowCode>>();
                         var filter = Builders<DeviceFlowCode>.Filter.In(x => x.DeviceCode, expiredCodes);
                         requests.Add(new DeleteManyModel<DeviceFlowCode>(filter));
-                        await _context.DeviceFlowCodes.BulkWriteAsync(requests, new BulkWriteOptions { BypassDocumentValidation = true, IsOrdered = true });
+                        await _context.DeviceFlowCodes.BulkWriteAsync(requests, new BulkWriteOptions { BypassDocumentValidation = true, IsOrdered = true }, cancellationToken);
 
                         if (_operationalStoreNotification != null)
-                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredCodes);
+                            await _operationalStoreNotification.PersistedGrantsRemovedAsync(expiredCodes, cancellationToken);
                     }
                     catch (Exception ex)
                     {
@@ -203,24 +204,24 @@
                 }
             }
 
-            await ClearJobReservation(REMOVE_DEVICECODES_TASKID, Dns.GetHostName());
+            await ClearJobReservationAsync(REMOVE_DEVICECODES_TASKID, Dns.GetHostName());
         }
 
-        private async Task RemovePersistedGrantsAsync(IList<string> grants)
+        private async Task RemovePersistedGrantsAsync(IList<string> grants, CancellationToken cancellationToken = default)
         {
             var requests = new List<WriteModel<PersistedGrant>>();
             var filter = Builders<PersistedGrant>.Filter.In(x => x.Key, grants);
             requests.Add(new DeleteManyModel<PersistedGrant>(filter));
-            await _context.PersistedGrants.BulkWriteAsync(requests, new BulkWriteOptions { BypassDocumentValidation = true, IsOrdered = true });
+            await _context.PersistedGrants.BulkWriteAsync(requests, new BulkWriteOptions { BypassDocumentValidation = true, IsOrdered = true }, cancellationToken);
         }
 
-        private async Task<bool> IsJobReserved(string taskId, string workerId)
+        private async Task<bool> IsJobReservedAsync(string taskId, string workerId, CancellationToken cancellationToken = default)
         {
             var filter = Builders<JobSchedule>.Filter.Eq(x => x.TaskId, taskId)
                 & (Builders<JobSchedule>.Filter.Eq(x => x.WorkerId, null) & Builders<JobSchedule>.Filter.Eq(x => x.WorkerExpiration, null))
                 | (Builders<JobSchedule>.Filter.Lt(x => x.WorkerExpiration, DateTime.UtcNow));
             var update = Builders<JobSchedule>.Update.Set(x => x.WorkerId, workerId).Set(x => x.WorkerExpiration, DateTime.UtcNow.AddSeconds(_options.WorkerExpiration));
-            var result = await _scheduler.Jobs.FindOneAndUpdateAsync(filter, update, new FindOneAndUpdateOptions<JobSchedule> { IsUpsert = false, ReturnDocument = ReturnDocument.After });
+            var result = await _scheduler.Jobs.FindOneAndUpdateAsync(filter, update, new FindOneAndUpdateOptions<JobSchedule> { IsUpsert = false, ReturnDocument = ReturnDocument.After }, cancellationToken);
             var reserved = result?.WorkerId == workerId;
 
             _logger.LogDebug("Reserving Job {TaskId} to {WorkerId}: {Reserved}", taskId, workerId, reserved);
@@ -228,13 +229,13 @@
             return reserved;
         }
 
-        private async Task ClearJobReservation(string taskId, string workerId)
+        private async Task ClearJobReservationAsync(string taskId, string workerId, CancellationToken cancellationToken = default)
         {
             _logger.LogDebug("Cleaning Job Reservation for {TaskId}", taskId);
 
             var filter = Builders<JobSchedule>.Filter.Eq(x => x.TaskId, taskId) & Builders<JobSchedule>.Filter.Eq(x => x.WorkerId, workerId);
             var update = Builders<JobSchedule>.Update.Set(x => x.WorkerId, null).Set(x => x.WorkerExpiration, null);
-            await _scheduler.Jobs.UpdateOneAsync(filter, update);
+            await _scheduler.Jobs.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
         }
     }
 }

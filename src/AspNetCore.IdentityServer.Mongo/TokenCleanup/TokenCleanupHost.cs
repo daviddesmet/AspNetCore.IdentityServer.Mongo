@@ -109,12 +109,12 @@
                     break;
                 }
 
-                await CreateJobDbEntries();
-                await RemoveExpiredGrantsAsync();
+                await CreateJobDbEntriesAsync(cancellationToken);
+                await RemoveExpiredGrantsAsync(cancellationToken);
             }
         }
 
-        private async Task CreateJobDbEntries()
+        private async Task CreateJobDbEntriesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -126,13 +126,13 @@
                 var options = new UpdateOptions { IsUpsert = true };
 
                 if (await db.Jobs.CountDocumentsAsync(Filter(TokenCleanupService.REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID)) == 0)
-                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID), Update(TokenCleanupService.REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID), options);
+                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID), Update(TokenCleanupService.REMOVE_EXPIRED_PERSISTEDGRANTS_TASKID), options, cancellationToken);
 
                 if (await db.Jobs.CountDocumentsAsync(Filter(TokenCleanupService.REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID)) == 0)
-                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID), Update(TokenCleanupService.REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID), options);
+                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID), Update(TokenCleanupService.REMOVE_CONSUMED_PERSISTEDGRANTS_TASKID), options, cancellationToken);
 
                 if (await db.Jobs.CountDocumentsAsync(Filter(TokenCleanupService.REMOVE_DEVICECODES_TASKID)) == 0)
-                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_DEVICECODES_TASKID), Update(TokenCleanupService.REMOVE_DEVICECODES_TASKID), options);
+                    await db.Jobs.UpdateOneAsync(Filter(TokenCleanupService.REMOVE_DEVICECODES_TASKID), Update(TokenCleanupService.REMOVE_DEVICECODES_TASKID), options, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -140,13 +140,13 @@
             }
         }
 
-        private async Task RemoveExpiredGrantsAsync()
+        private async Task RemoveExpiredGrantsAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 using var serviceScope = _serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
                 var tokenCleanupService = serviceScope.ServiceProvider.GetRequiredService<TokenCleanupService>();
-                await tokenCleanupService.RemoveExpiredGrantsAsync();
+                await tokenCleanupService.RemoveExpiredGrantsAsync(cancellationToken);
             }
             catch (Exception ex)
             {
